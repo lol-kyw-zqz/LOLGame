@@ -1,19 +1,22 @@
 package com.kyw;
 
-import com.kyw.lolgames.HeroFactory;
 import com.kyw.lolgames.entity.HerosEntity;
+import com.kyw.lolgames.service.HeroService;
+import com.kyw.lolgames.utils.InterFaceFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
+ * @author kyw
  * Created by 96300 on 2019/11/23.
  */
 @SpringBootApplication
-//@MapperScan("com.kym.lolgame.dao")
 public class LeagueOfLegends implements CommandLineRunner {
+    private HeroService heroService =  InterFaceFactory.getInstance(HeroService.class);
 
     public static void main(String[] args) {
         SpringApplication.run(LeagueOfLegends.class, args);
@@ -24,27 +27,32 @@ public class LeagueOfLegends implements CommandLineRunner {
         //初始化亚索
         System.out.println("---欢迎来到英雄联盟---");
         Scanner sc = new Scanner(System.in);
-
+        StringBuilder sb = new StringBuilder();
         while (true) {
-            System.out.println("请选择你的英雄：1.疾风剑豪-亚索，2.探险家-伊泽瑞尔，3.迅捷斥候-提莫，4.德玛西亚皇子-嘉文四世");
+
+            List<HerosEntity> entityList = heroService.getAllHeroInstance();
+            for(HerosEntity vo : entityList){
+                sb.append(vo.getId()+"."+vo.getName()+" ");
+            }
+            System.out.println("请选择你的英雄："+sb.toString());
             String line = sc.nextLine();
             boolean isRight = "1".equals(line) || "2".equals(line) || "3".equals(line) || "4".equals(line);
-            HerosEntity myHero = null;
+            HerosEntity myHero;
             if(isRight) {
-                myHero = HeroFactory.getHeroInstance(line);
+                myHero = heroService.getHeroInstance(line);
             }else{
                 System.out.println("输入的数字不正确，GAMEOVER！！！！！！！");
                 break;
 
             }
 
-            System.out.println("请选择你的对手：1.疾风剑豪-亚索，2.探险家-伊泽瑞尔，3.迅捷斥候-提莫，4.德玛西亚皇子-嘉文四世,5.无极剑圣-易大师，6.雪人骑士-努努,7.诺克萨斯之手-德莱厄斯,8.流浪法师-瑞兹");
+            System.out.println("请选择敌方英雄："+sb.toString());
             boolean isRight_2 = "1".equals(line) || "2".equals(line) || "3".equals(line) || "4".equals(line) ||
                     "5".equals(line) || "6".equals(line) || "7".equals(line) || "8".equals(line);
             String line2 = sc.nextLine();
             HerosEntity enemyHero = null;
             if(isRight_2) {
-                enemyHero = HeroFactory.getHeroInstance(line2);
+                enemyHero = heroService.getHeroInstance(line2);
             }else{
                 System.out.println("输入的数字不正确，GAMEOVER！！！！！！！");
                 break;
@@ -156,7 +164,7 @@ public class LeagueOfLegends implements CommandLineRunner {
 
         if(ownHero.getHp()<0){
             System.out.println(enemyHero.getName()+"击杀了"+ownHero.getName());
-            System.out.println("恕我直言你就是个辣鸡~_~╮︶﹏︶╭！！！！");
+            System.out.println("哇，你好棒哦=( °∀° )！！！！");
             return true;
         }else if(enemyHero.getHp()<0){
             System.out.println(ownHero.getName()+"击杀了"+enemyHero.getName());

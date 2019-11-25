@@ -9,6 +9,9 @@ import lombok.Data;
 @Data
 public class HerosEntity {
 
+    /**主键*/
+    private int id;
+
     /**英雄名称*/
     private String name;
 
