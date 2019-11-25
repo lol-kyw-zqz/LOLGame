@@ -20,10 +20,11 @@ public class DBUtil {
 
     static {
         try {
-            url = ResourceBundle.getBundle("jdbc").getString("url").trim();
-            driver = ResourceBundle.getBundle("jdbc").getString("driver").trim();
-            username = ResourceBundle.getBundle("jdbc").getString("username").trim();
-            password = ResourceBundle.getBundle("jdbc").getString("password").trim();
+            ResourceBundle bundle = ResourceBundle.getBundle("jdbc");
+            url = bundle.getString("url").trim();
+            driver = bundle.getString("driver").trim();
+            username = bundle.getString("username").trim();
+            password = bundle.getString("password").trim();
             //1.获取驱动
             Class.forName(driver);
         } catch (Exception e) {
